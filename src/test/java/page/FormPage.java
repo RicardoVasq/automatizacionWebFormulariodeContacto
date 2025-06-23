@@ -3,6 +3,7 @@ package page;
 import base.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -61,6 +62,17 @@ public class FormPage extends BaseTest {
         return driver.findElement(locator).isSelected();
     }
 
+    public void setDateOfBirth(String date) {
+        WebElement dateInput = driver.findElement(inputDate);
+        // 1. Limpiar y escribir la fecha
+        dateInput.sendKeys(Keys.CONTROL + "a");
+        dateInput.sendKeys(date);
+
+        // 2. Forzar el cierre del calendario con JavaScript
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("document.querySelector('.react-datepicker').style.display='none';");
+    }
+
     public void selectDropdown(By dropdownLocator, String optionText) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -82,6 +94,19 @@ public class FormPage extends BaseTest {
 
     public void clickSubmit() {
         driver.findElement(buttonSubmit).click();
+    }
+
+    public boolean isValueInModal(String label, String expectedValue) {
+        String xpath = String.format("//td[text()='%s']/following-sibling::td", label);
+        WebElement cell = driver.findElement(By.xpath(xpath));
+        return cell.getText().trim().equals(expectedValue);
+    }
+
+    public boolean isFormSubmittedSuccessfully() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement modalTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("example-modal-sizes-title-lg")));
+        return modalTitle.getText().equals("Thanks for submitting the form");
     }
 
 

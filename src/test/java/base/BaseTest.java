@@ -35,7 +35,7 @@ public class BaseTest {
         driver = new ChromeDriver();
 
         Logs.debug("Ingresamos a la URL");
-        driver.get("https://demoqa.com/");
+        driver.get("https://demoqa.com/automation-practice-form");
 
         Logs.debug("Maximizamos pantalla");
         driver.manage().window().maximize();
