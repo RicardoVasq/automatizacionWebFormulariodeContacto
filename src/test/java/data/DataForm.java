@@ -3,6 +3,8 @@ package data;
 import base.BaseTest;
 import org.testng.annotations.DataProvider;
 
+import java.util.Arrays;
+
 public class DataForm extends BaseTest {
 
     @DataProvider(name = "formData")
@@ -28,4 +30,27 @@ public class DataForm extends BaseTest {
                 // Puedes agregar más casos negativos
         };
     }
+
+    @DataProvider(name = "citiesByStateData")
+    public Object[][] provideCitiesByState() {
+        return new Object[][]{
+                {
+                        "NCR",
+                        Arrays.asList("Delhi", "Gurgaon", "Noida")
+                },
+                {
+                        "Uttar Pradesh",
+                        Arrays.asList("Agra", "Lucknow", "Merrut")
+                },
+                {
+                        "Haryana",
+                        Arrays.asList("Karnal", "Panipat")
+                },
+                {
+                        "Rajasthan",
+                        Arrays.asList("Jaipur", "Jaiselmer")
+                }
+        };
+    }
+
 }

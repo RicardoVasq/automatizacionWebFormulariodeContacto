@@ -8,7 +8,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormPage extends BaseTest {
     //Localizadores
@@ -31,6 +34,7 @@ public class FormPage extends BaseTest {
     public By inputState = By.id("state");
     public By inputCity = By.id("city");
     public By buttonSubmit = By.id("submit");
+    public String picturePath = Paths.get("src/test/resources/Imagen/descargar.jpg").toAbsolutePath().toString();
 
 
     //Metodos
@@ -88,8 +92,20 @@ public class FormPage extends BaseTest {
         option.click();
     }
 
-    public void selectHobbies(String forAttributeValue) {
-        driver.findElement(By.cssSelector("label[for='" + forAttributeValue + "']")).click();
+    public boolean isFieldValid(By locator) {
+        WebElement element = driver.findElement(locator);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return (Boolean) js.executeScript("return arguments[0].checkValidity();", element);
+    }
+
+    public boolean isFieldInvalid(By locator) {
+        return !isFieldValid(locator);
+    }
+
+    public void selectHobby(String hobbyName) {
+        String xpath = String.format("//label[text()='%s']", hobbyName);
+        WebElement label = driver.findElement(By.xpath(xpath));
+        label.click();
     }
 
     public void clickSubmit() {
@@ -109,5 +125,59 @@ public class FormPage extends BaseTest {
         return modalTitle.getText().equals("Thanks for submitting the form");
     }
 
+    public void addSubject(String subject) {
+        WebElement inputSubjects = driver.findElement(By.id("subjectsInput"));
+        inputSubjects.sendKeys(subject);
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        String optionXpath = String.format("//div[contains(@class,'subjects-auto-complete__menu')]//div[text()='%s']", subject);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(optionXpath)));
+
+        WebElement option = driver.findElement(By.xpath(optionXpath));
+        option.click();
+    }
+
+    public void uploadPicture() {
+        WebElement fileInput = driver.findElement(inputPicture);
+        fileInput.sendKeys(picturePath);
+    }
+
+    public void selectState(String stateName) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Click en el dropdown State
+        WebElement stateDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("state")));
+        stateDropdown.click();
+
+        WebElement stateOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[contains(@id,'react-select') and text()='" + stateName + "']")));
+        stateOption.click();
+    }
+
+    public List<String> getAllCitie(By dropdownLocator, String state) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        List<String> cities = new ArrayList<>();
+
+        // Asegúrate de seleccionar primero un State,
+        WebElement stateDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("state")));
+        stateDropdown.click();
+
+        WebElement stateOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[contains(@id,'react-select') and text()='" + state + "']")));
+        stateOption.click();
+
+        // Click en el campo City
+        WebElement cityDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("city")));
+        cityDropdown.click();
+
+        // Esperar y capturar las opciones visibles
+        By optionsLocator = By.cssSelector("div[id^='react-select-4-option']");
+        List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(optionsLocator));
+
+        for (WebElement option : options) {
+            cities.add(option.getText().trim());
+        }
+
+        return cities;
+    }
 
 }
