@@ -35,6 +35,8 @@ public class FormPage extends BaseTest {
     public By inputCity = By.id("city");
     public By buttonSubmit = By.id("submit");
     public String picturePath = Paths.get("src/test/resources/Imagen/descargar.jpg").toAbsolutePath().toString();
+    private By modalTitle = By.id("example-modal-sizes-title-lg");
+    private By modalContent = By.className("table-responsive");
 
 
     //Metodos
@@ -178,6 +180,12 @@ public class FormPage extends BaseTest {
         }
 
         return cities;
+    }
+
+    public boolean isModalDisplayed() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(modalTitle));
+        return driver.findElement(modalTitle).getText().contains("Thanks for submitting the form");
     }
 
 }

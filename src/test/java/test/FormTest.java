@@ -188,5 +188,4 @@ public class FormTest extends BaseTest {
                 "Las ciudades mostradas no coinciden con las esperadas para el estado: " + state);
     }
 
-
 }
