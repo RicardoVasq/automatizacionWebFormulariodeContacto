@@ -18,36 +18,21 @@ public class FormPage extends BaseTest {
     public By inputFirstName = By.id("firstName");
     public By inputLastName = By.id("lastName");
     public By inputEmail = By.id("userEmail");
-    public By inputGenderMale = By.id("gender-radio-1");
     public By labelGenderMale = By.cssSelector("label[for='gender-radio-1']");
-    public By inputGenderFemale = By.id("gender-radio-2");
     public By labelGenderFemale = By.cssSelector("label[for='gender-radio-2']");
-    public By inputGenderOther = By.id("gender-radio-3");
     public By labelGenderOther = By.cssSelector("label[for='gender-radio-3']");
     public By inputMobile = By.id("userNumber");
     public By inputDate = By.id("dateOfBirthInput");
-    public By inputHobbiesSports = By.id("hobbies-checkbox-1");
-    public By inputHobbiesReading = By.id("hobbies-checkbox-2");
-    public By inputHobbiesMusic = By.id("hobbies-checkbox-3");
     public By inputPicture = By.id("uploadPicture");
-    public By inputAddres = By.id("currentAddress");
     public By inputState = By.id("state");
     public By inputCity = By.id("city");
     public By buttonSubmit = By.id("submit");
     public String picturePath = Paths.get("src/test/resources/Imagen/descargar.jpg").toAbsolutePath().toString();
-    private By modalTitle = By.id("example-modal-sizes-title-lg");
-    private By modalContent = By.className("table-responsive");
 
 
     //Metodos
     public void senKeysInputText(String information, By component) {
         driver.findElement(component).sendKeys(information);
-    }
-
-    public boolean isEmailValid() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement emailInput = driver.findElement(inputEmail);
-        return (Boolean) js.executeScript("return arguments[0].checkValidity();", emailInput);
     }
 
     public void selectGender(String gender) {
@@ -62,10 +47,6 @@ public class FormPage extends BaseTest {
                 driver.findElement(labelGenderOther).click();
                 break;
         }
-    }
-
-    public boolean isGenderSelected(By locator) {
-        return driver.findElement(locator).isSelected();
     }
 
     public void setDateOfBirth(String date) {
@@ -144,17 +125,6 @@ public class FormPage extends BaseTest {
         fileInput.sendKeys(picturePath);
     }
 
-    public void selectState(String stateName) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        // Click en el dropdown State
-        WebElement stateDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("state")));
-        stateDropdown.click();
-
-        WebElement stateOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[contains(@id,'react-select') and text()='" + stateName + "']")));
-        stateOption.click();
-    }
-
     public List<String> getAllCitie(By dropdownLocator, String state) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         List<String> cities = new ArrayList<>();
@@ -182,10 +152,5 @@ public class FormPage extends BaseTest {
         return cities;
     }
 
-    public boolean isModalDisplayed() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(modalTitle));
-        return driver.findElement(modalTitle).getText().contains("Thanks for submitting the form");
-    }
 
 }
