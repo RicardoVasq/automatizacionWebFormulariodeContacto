@@ -29,6 +29,7 @@ public class FormPage extends BaseTest {
     public By inputAddres = By.id("currentAddress");
     public By inputState = By.id("state");
     public By inputCity = By.id("city");
+    public By buttonSubmit = By.id("submit");
 
 
     //Metodos
@@ -77,6 +78,10 @@ public class FormPage extends BaseTest {
 
     public void selectHobbies(String forAttributeValue) {
         driver.findElement(By.cssSelector("label[for='" + forAttributeValue + "']")).click();
+    }
+
+    public void clickSubmit() {
+        driver.findElement(buttonSubmit).click();
     }
 
 
