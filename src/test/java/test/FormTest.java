@@ -65,7 +65,7 @@ public class FormTest extends BaseTest {
     }
 
     @Severity(SeverityLevel.CRITICAL)
-    @Story("El usuario inggresa un correo con formato incorrecto")
+    @Story("El usuario ingresa un correo con formato incorrecto")
     @Description("TC03 - Validación de formato incorrecto de email - Negativa")
     @Test(groups = {"negativa", "regression"})
     public void testTC03() {
